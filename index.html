@@ -2,385 +2,559 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0D2B1D">
     <!-- 破解防盗链黑科技 -->
     <meta name="referrer" content="no-referrer">
-    <title>上海三日漫游日程</title>
+    <title>爸妈的上海专属之旅 | 海派漫游路书</title>
+    
+    <!-- 引入全屏滚动神器 fullPage.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css">
+    <!-- Google 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    
     <style>
-        /* 极简高级UI配色体系 */
         :root {
-            --bg-page: #F5F5F7; /* 高级灰底色 */
-            --bg-card: #FFFFFF;
-            --text-primary: #1D1D1F; /* 极深灰，对比度高且护眼 */
-            --text-secondary: #515154;
-            --accent-color: #8B2222; /* 海派复古红，克制而优雅 */
-            --line-color: #D2D2D7;
-            /* 严格控制的基础超大字号 */
-            --font-base: 36px;
-            --font-title: 52px;
-            --font-subtitle: 40px;
+            /* 👑 全新海派老钱风配色：和平饭店绿 + 香槟金 */
+            --ink-deep: #1A2421; 
+            --ink-medium: #2C3E38;
+            --mist-gray: #8B9591;
+            
+            /* 祖母绿体系 */
+            --emerald-deep: #0D2B1D; 
+            --emerald-main: #1A4331; 
+            --emerald-light: #2A5E46;
+            
+            /* 香槟金体系 */
+            --gold-accent: #C5A059;
+            --gold-bright: #E2C782;
+            --gold-pale: #F4EEDD;
+            
+            /* 老洋房底色体系 */
+            --paper: #F7F5F0;
+            --cream: #FAF9F6;
+            --cream-warm: #EAE5D9;
+
+            /* 响应式间距基础 */
+            --sm: 0.5rem;
+            --md: 1rem;
+            --lg: 1.5rem;
+            --xl: 2rem;
+            --xxl: 3rem;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
+            /* 基础字号使用相对单位，系统字体放大时会等比放大，但不强制锁死像素 */
+            font-size: 1.15rem; 
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-primary);
-            font-size: var(--font-base);
-            line-height: 1.5;
-            padding: 40px 20px;
+            background: var(--paper);
+            color: var(--ink-deep);
+            line-height: 1.6;
+            /* 开启强制安全换行，防止巨大字体撑爆屏幕 */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 顶部标题栏 */
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 0 20px;
+        /* 仅对标题使用复古衬线体 */
+        h1, h2, h3, .day-number, .timeline-day, .footer-quote {
+            font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
         }
 
-        .header h1 {
-            font-size: 64px;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            letter-spacing: 2px;
+        /* 纸质纹理覆盖层 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 9999;
         }
 
-        .header .date-info {
-            font-size: var(--font-subtitle);
-            color: var(--text-secondary);
-            font-weight: 500;
+        /* 修改 fullPage 导航点颜色 */
+        #fp-nav ul li a span, .fp-slidesNav ul li a span {
+            background: var(--emerald-main) !important;
         }
 
-        /* 每日行程卡片 */
-        .day-section {
-            background-color: var(--bg-card);
-            border-radius: 32px;
-            padding: 50px 40px;
-            margin-bottom: 50px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        /* ================= 顶部大片区域 (Hero Section) ================= */
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #F3EFE9 0%, #EAE5D9 30%, #DED5C6 60%, #C2B5A3 100%);
+            z-index: 0;
+        }
+
+        .hero-mountains {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 85%; pointer-events: none; z-index: 1;
+        }
+
+        .karst-far { position: absolute; bottom: 0; width: 100%; height: 70%; opacity: 0.35; filter: blur(2px); }
+        .karst-mid-far { position: absolute; bottom: 0; width: 100%; height: 58%; opacity: 0.5; }
+        .karst-mid { position: absolute; bottom: 0; width: 100%; height: 45%; opacity: 0.7; }
+        .ink-wash {
+            position: absolute; width: 100%; height: 55%; bottom: 18%;
+            background: linear-gradient(180deg, transparent 0%, rgba(20,60,40,0.1) 25%, rgba(20,60,40,0.2) 50%, rgba(20,60,40,0.1) 75%, transparent 100%);
+            animation: ink-float 30s ease-in-out infinite;
+        }
+        @keyframes ink-float { 0%, 100% { transform: translateX(-8%); opacity: 0.7; } 50% { transform: translateX(8%); opacity: 0.9; } }
+
+        .hero-content {
+            position: relative; z-index: 10; text-align: center; padding: var(--xl);
+            display: flex; flex-direction: column; align-items: center; gap: var(--lg);
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: var(--sm);
+            padding: var(--sm) var(--lg);
+            background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px);
+            border: 2px solid rgba(197, 160, 89, 0.5); 
+            border-radius: 40px; font-size: 1rem; 
+            color: var(--emerald-deep); font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 12vw, 5rem); font-weight: bold;
+            color: var(--emerald-deep); line-height: 1.1; letter-spacing: 0.08em;
+            text-shadow: 0 4px 20px rgba(255,255,255,0.9), 0 2px 2px rgba(0,0,0,0.05);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 4vw, 1.3rem); color: var(--ink-medium); font-weight: 600;
+            letter-spacing: 0.3em;
+        }
+
+        .scroll-indicator {
+            position: absolute; bottom: var(--xl); left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: var(--sm);
+            color: var(--emerald-main); font-size: 0.9rem; font-weight: bold;
+            animation: bounce 2s ease-in-out infinite; z-index: 10;
+        }
+        .scroll-indicator svg { width: 30px; height: 30px; }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+
+        /* ================= 通用区域布局 ================= */
+        .section-inner {
+            padding: var(--xxl) var(--md);
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-header { text-align: center; margin-bottom: var(--xl); }
+        .section-label { font-size: 0.9rem; font-weight: bold; color: var(--gold-accent); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: var(--sm); }
+        .section-title { font-size: clamp(2rem, 8vw, 2.8rem); color: var(--emerald-deep); margin-bottom: var(--sm); font-weight: bold; }
+        .section-desc { color: var(--ink-medium); font-weight: 500; font-size: 1.1rem; }
+
+        /* ================= 概览区域 ================= */
+        .overview-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #C2B5A3 0%, var(--paper) 20%); z-index: 0;
+        }
+        
+        .timeline-overview { position: relative; z-index: 10; }
+        
+        .timeline-item-ov { 
+            display: flex; flex-direction: column; /* 手机端默认堆叠，防挤爆 */
+            gap: var(--md); margin-bottom: var(--lg); 
+            background: white; border-radius: 20px; padding: var(--lg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 2px solid rgba(197, 160, 89, 0.15);
+        }
+
+        .timeline-header { display: flex; align-items: baseline; gap: var(--sm); margin-bottom: 0.5rem; }
+        .timeline-day { font-size: 1.2rem; font-weight: bold; color: var(--emerald-main); }
+        .timeline-date { font-size: 1rem; color: var(--mist-gray); font-weight: 500; }
+        .timeline-title-text { font-size: 1.3rem; color: var(--ink-deep); margin-bottom: 0.8rem; font-weight: bold; }
+        .timeline-route { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .timeline-route span { font-size: 1rem; color: var(--ink-medium); font-weight: 600; }
+        .timeline-route .arrow { color: var(--gold-accent); font-size: 0.9rem; font-weight: bold; }
+
+        /* ================= 每日卡片区域 ================= */
+        .day-card {
+            background: white; border-radius: 24px; overflow: hidden;
+            box-shadow: 0 8px 30px rgba(13, 43, 29, 0.08); 
+            border: 2px solid rgba(197, 160, 89, 0.2);
+            margin: var(--sm) 0;
         }
 
         .day-header {
-            font-size: var(--font-title);
-            font-weight: bold;
-            color: var(--accent-color);
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 2px solid var(--line-color);
+            background: linear-gradient(135deg, var(--emerald-deep) 0%, var(--emerald-main) 100%);
+            padding: var(--lg); position: relative; overflow: hidden;
+        }
+        .day-header::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+            background: linear-gradient(180deg, var(--gold-bright), var(--gold-accent), #c28842);
         }
 
-        /* 时间轴UI设计 */
-        .timeline {
-            position: relative;
-            padding-left: 50px;
+        .day-badge-row { display: flex; align-items: center; gap: var(--md); margin-bottom: var(--sm); }
+        .day-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold-accent));
+            border-radius: 12px; color: var(--emerald-deep);
+            font-weight: bold; font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.4); flex-shrink: 0;
         }
+        .day-date { font-size: 1.1rem; color: rgba(255, 255, 255, 0.9); letter-spacing: 0.05em; font-weight: 500; }
+        .day-title { font-size: clamp(1.6rem, 7vw, 2rem); color: var(--gold-pale); text-shadow: 0 2px 8px rgba(0,0,0,0.4); font-weight: bold; }
 
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 10px;
-            bottom: 20px;
-            width: 4px;
-            background-color: var(--line-color);
-            border-radius: 2px;
-        }
+        .day-content { padding: var(--lg); }
 
-        .timeline-item {
-            position: relative;
-            margin-bottom: 60px;
+        /* 时间节点：响应式防御核心！*/
+        .time-slot {
+            display: flex; flex-direction: column; /* 手机端垂直排列，给文字无限横向空间 */
+            gap: 0.5rem;
+            margin-bottom: var(--lg); padding-bottom: var(--lg);
+            border-bottom: 2px dashed rgba(197, 160, 89, 0.3);
         }
-
-        .timeline-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -50px;
-            top: 14px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: var(--bg-card);
-            border: 6px solid var(--accent-color);
-            z-index: 1;
-        }
+        .time-slot:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
         .time-label {
-            font-size: 38px;
-            font-weight: bold;
-            color: var(--accent-color);
-            margin-bottom: 8px;
-            display: inline-block;
-            margin-right: 20px;
+            font-size: 1.2rem; font-family: 'ZCOOL XiaoWei', serif;
+            color: var(--emerald-main); font-weight: bold;
         }
 
-        .location-title {
-            font-size: 44px;
-            font-weight: bold;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: inline-block;
+        .slot-content h4 {
+            font-size: 1.3rem; color: var(--ink-deep); margin-bottom: 0.5rem;
+            display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-weight: bold;
+        }
+        .slot-tag {
+            font-size: 0.85rem; padding: 2px 10px;
+            background: var(--gold-pale); color: var(--emerald-deep);
+            border-radius: 6px; font-weight: bold; border: 1px solid rgba(197, 160, 89, 0.4);
+            white-space: nowrap; /* 标签内容不换行 */
+        }
+        .slot-content p {
+            color: var(--ink-medium); font-size: 1.05rem;
+            font-weight: 500; line-height: 1.7;
         }
 
-        .desc {
-            font-size: 38px;
-            color: var(--text-secondary);
-            margin-top: 10px;
-        }
-
-        /* 高清实景图框 */
+        /* 必应大图：自适应宽高比 */
         .image-frame {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            border-radius: 24px;
-            margin: 30px 0;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
-            background-color: #EBEBEF;
+            position: relative; width: 100%; aspect-ratio: 16/9; /* 高级宽屏比例，自适应压缩 */
+            border-radius: 16px; margin: var(--md) 0; overflow: hidden;
+            border: 2px solid rgba(0,0,0,0.05); background-color: var(--gold-pale);
         }
-
-        .image-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-            display: block;
-        }
-        
-        .image-frame:hover img {
-            transform: scale(1.03);
-        }
-
-        /* 兜底文字卡片 */
+        .image-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .fallback-text {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            align-items: center;
-            justify-content: center;
+            display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            align-items: center; justify-content: center;
             background: linear-gradient(135deg, #EBEBEF 0%, #D8D8DF 100%);
-            color: #6C6C70;
-            font-size: 42px;
-            font-weight: bold;
-            text-align: center;
+            color: #6C6C70; font-size: 1.1rem; font-weight: bold;
         }
 
+        /* ================= 底部区域 ================= */
+        .footer-content {
+            background: var(--emerald-deep); color: var(--gold-pale);
+            text-align: center; padding: var(--xxl) var(--xl);
+            width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;
+        }
+        .footer-quote { font-size: clamp(1.8rem, 8vw, 2.4rem); margin-bottom: var(--md); color: var(--gold-accent); font-weight: bold; }
+        .footer-note { font-size: 1.1rem; opacity: 0.9; font-weight: 500; }
+
+        /* ================= 大屏优化 (PC/平板横屏) ================= */
+        @media (min-width: 768px) {
+            .timeline-item-ov { flex-direction: row; align-items: center; }
+            .time-slot { flex-direction: row; grid-template-columns: 140px 1fr; display: grid; gap: var(--lg); }
+            .time-label { padding-top: 4px; }
+            .image-frame { height: 380px; aspect-ratio: auto; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>上海三日漫游日程</h1>
-        <div class="date-info">6月19日 - 6月21日 | 济南 ⇌ 上海</div>
-    </div>
+    <!-- fullPage.js 容器 -->
+    <div id="fullpage">
 
-    <!-- 魔法指令：提取上海外滩全景 -->
-    <div class="image-frame">
-        <img src="https://tse1-mm.cn.bing.net/th?q=上海外滩白天高清风景&w=1200&h=800&c=7&rs=1" alt="上海外滩全景" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="fallback-text">📍 上海外滩实景</div>
-    </div>
-
-    <!-- Day 1 -->
-    <div class="day-section">
-        <div class="day-header">Day 1：岁月回声与历史印记</div>
-        <div class="timeline">
-            
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">13:00</span>
-                    <span class="location-title">抵达与入住</span>
-                </div>
-                <div class="desc">入住全季酒店（吴中路店），稍作休整。</div>
+        <!-- 🌟 第一屏：海派封面大片 -->
+        <div class="section" id="section-hero">
+            <div class="hero-bg"></div>
+            <div class="hero-mountains">
+                <!-- 远景波浪：香槟金与晨雾的结合 -->
+                <svg class="karst-far" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice">
+                    <defs><linearGradient id="farGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="transparent"/><stop offset="30%" stop-color="#E2C782"/><stop offset="100%" stop-color="#C5A059"/></linearGradient></defs>
+                    <ellipse cx="50" cy="500" rx="55" ry="280" fill="url(#farGrad)"/><ellipse cx="220" cy="500" rx="65" ry="310" fill="url(#farGrad)"/><ellipse cx="400" cy="500" rx="70" ry="340" fill="url(#farGrad)"/><ellipse cx="680" cy="500" rx="52" ry="260" fill="url(#farGrad)"/><ellipse cx="960" cy="500" rx="72" ry="350" fill="url(#farGrad)"/><ellipse cx="1340" cy="500" rx="65" ry="305" fill="url(#farGrad)"/>
+                </svg>
+                <svg class="karst-mid-far" viewBox="0 0 1440 450" preserveAspectRatio="xMidYMax slice">
+                    <defs><linearGradient id="midFarGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="transparent"/><stop offset="25%" stop-color="#8B9591"/><stop offset="100%" stop-color="#2C3E38"/></linearGradient></defs>
+                    <ellipse cx="180" cy="450" rx="50" ry="200" fill="url(#midFarGrad)"/><ellipse cx="520" cy="450" rx="80" ry="320" fill="url(#midFarGrad)"/><ellipse cx="1000" cy="450" rx="78" ry="310" fill="url(#midFarGrad)"/>
+                </svg>
+                <!-- 近景波浪：祖母绿沉淀 -->
+                <svg class="karst-mid" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice">
+                    <defs><linearGradient id="midGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="transparent"/><stop offset="20%" stop-color="#2A5E46"/><stop offset="100%" stop-color="#1A4331"/></linearGradient></defs>
+                    <ellipse cx="100" cy="400" rx="70" ry="240" fill="url(#midGrad)"/><ellipse cx="340" cy="400" rx="82" ry="280" fill="url(#midGrad)"/><ellipse cx="600" cy="400" rx="85" ry="290" fill="url(#midGrad)"/><ellipse cx="860" cy="400" rx="78" ry="265" fill="url(#midGrad)"/><ellipse cx="1260" cy="400" rx="62" ry="215" fill="url(#midGrad)"/>
+                </svg>
+                <div class="ink-wash"></div>
             </div>
 
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">14:00</span>
-                    <span class="location-title">上海毛泽东旧居</span>
-                </div>
-                <div class="desc">参观静安区茂名北路石库门建筑，探访伟人足迹。</div>
+            <div class="hero-content">
+                <span class="hero-badge">上海 · 魔都之旅</span>
+                <h1 class="hero-title">海派漫游</h1>
+                <p class="hero-subtitle">爸妈的专属三日旅行</p>
             </div>
 
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">15:00</span>
-                    <span class="location-title">上海宋庆龄故居</span>
-                </div>
-                <div class="desc">感受幽静雅致的洋房环境与历史沉淀。</div>
+            <div class="scroll-indicator">
+                <span>向上滑动</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
             </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">16:00</span>
-                    <span class="location-title">武康路历史街区</span>
-                </div>
-                <!-- 魔法指令：提取武康大楼 -->
-                <div class="image-frame">
-                    <img src="https://tse1-mm.cn.bing.net/th?q=上海武康大楼高清风景&w=1200&h=800&c=7&rs=1" alt="武康大楼" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="fallback-text">📍 武康大楼实景</div>
-                </div>
-                <div class="desc">漫步徐汇梧桐区，外观著名地标武康大楼。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">17:30</span>
-                    <span class="location-title">圆苑酒家（兴国路店）</span>
-                </div>
-                <div class="desc">晚餐时刻，品尝正宗本帮浓油赤酱风味。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">19:30</span>
-                    <span class="location-title">豫园商城</span>
-                </div>
-                <div class="desc">夜间散步，欣赏九曲桥与古典园林外围的璀璨夜灯。</div>
-            </div>
-
         </div>
-    </div>
 
-    <!-- Day 2 -->
-    <div class="day-section">
-        <div class="day-header">Day 2：浦江风云与海派绮梦</div>
-        <div class="timeline">
-            
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">09:00</span>
-                    <span class="location-title">东方明珠广播电视塔</span>
+        <!-- 🌟 第二屏：总览屏 -->
+        <div class="section" id="section-overview">
+            <div class="overview-bg"></div>
+            <div class="section-inner">
+                <div class="section-header">
+                    <div class="section-label">Trip Overview</div>
+                    <h2 class="section-title">行程概览</h2>
+                    <p class="section-desc">步伐从容，尽享风景</p>
                 </div>
-                <!-- 魔法指令：提取东方明珠 -->
-                <div class="image-frame">
-                    <img src="https://tse1-mm.cn.bing.net/th?q=上海东方明珠塔高清风景&w=1200&h=800&c=7&rs=1" alt="东方明珠塔" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="fallback-text">📍 东方明珠实景</div>
+
+                <div class="timeline-overview">
+                    <div class="timeline-item-ov">
+                        <div class="timeline-header">
+                            <span class="timeline-day">第一天</span>
+                            <span class="timeline-date">6月19日</span>
+                        </div>
+                        <div class="timeline-title-text">岁月回声与江南夜景</div>
+                        <div class="timeline-route">
+                            <span>入住酒店</span> <span class="arrow">→</span> <span>毛泽东旧居</span> <span class="arrow">→</span> <span>武康路</span> <span class="arrow">→</span> <span>豫园夜游</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item-ov">
+                        <div class="timeline-header">
+                            <span class="timeline-day">第二天</span>
+                            <span class="timeline-date">6月20日</span>
+                        </div>
+                        <div class="timeline-title-text">浦江风云与千古情缘</div>
+                        <div class="timeline-route">
+                            <span>东方明珠</span> <span class="arrow">→</span> <span>轮渡过江</span> <span class="arrow">→</span> <span>城隍庙</span> <span class="arrow">→</span> <span>上海千古情</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item-ov">
+                        <div class="timeline-header">
+                            <span class="timeline-day">第三天</span>
+                            <span class="timeline-date">6月21日</span>
+                        </div>
+                        <div class="timeline-title-text">祈福纳祥与红色初心</div>
+                        <div class="timeline-route">
+                            <span>静安寺</span> <span class="arrow">→</span> <span>一大会址</span> <span class="arrow">→</span> <span>思南公馆</span> <span class="arrow">→</span> <span>高铁返程</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="desc">晨间登高，俯瞰黄浦江两岸壮丽天际线。</div>
             </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">10:30</span>
-                    <span class="location-title">黄浦江轮渡</span>
-                </div>
-                <div class="desc">体验百年过江航线，横跨黄浦江前往浦西。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">11:00</span>
-                    <span class="location-title">外滩与和平饭店</span>
-                </div>
-                <div class="desc">漫步万国建筑群，步入和平饭店感受远东第一楼底蕴。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">12:30</span>
-                    <span class="location-title">德兴菜馆（广东路总店）</span>
-                </div>
-                <div class="desc">午餐时刻，体验百年老字号的经典本帮菜肴。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">14:00</span>
-                    <span class="location-title">上海城隍庙</span>
-                </div>
-                <div class="desc">入园参观，感受上海历史悠久的道教文化与祈福氛围。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">15:30</span>
-                    <span class="location-title">返回酒店休整</span>
-                </div>
-                <div class="desc">乘车返回吴中路全季酒店，进行午后休息，恢复体力。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">18:30</span>
-                    <span class="location-title">《上海千古情》大秀</span>
-                </div>
-                <!-- 魔法指令：提取千古情大秀 -->
-                <div class="image-frame">
-                    <img src="https://tse1-mm.cn.bing.net/th?q=上海千古情演出舞台高清&w=1200&h=800&c=7&rs=1" alt="舞台秀演出" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="fallback-text">📍 舞台秀演出实况</div>
-                </div>
-                <div class="desc">前往世博园区，观赏极具视觉震撼力的大型室内演出。</div>
-            </div>
-
         </div>
-    </div>
 
-    <!-- Day 3 -->
-    <div class="day-section">
-        <div class="day-header">Day 3：祈福漫步与从容返程</div>
-        <div class="timeline">
-            
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">09:00</span>
-                    <span class="location-title">静安寺</span>
-                </div>
-                <!-- 魔法指令：提取静安寺 -->
-                <div class="image-frame">
-                    <img src="https://tse1-mm.cn.bing.net/th?q=上海静安寺高清风景&w=1200&h=800&c=7&rs=1" alt="静安寺" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="fallback-text">📍 静安寺实景</div>
-                </div>
-                <div class="desc">晨间参观市中心的千年古刹，祈福纳祥。</div>
+        <!-- 🌟 第三屏：Day 1 -->
+        <div class="section" id="section-day1">
+            <div class="section-inner">
+                <article class="day-card">
+                    <div class="day-header">
+                        <div class="day-badge-row">
+                            <div class="day-number">D1</div>
+                            <div class="day-date">6月19日</div>
+                        </div>
+                        <h3 class="day-title">岁月回声与历史印记</h3>
+                    </div>
+                    <div class="day-content">
+                        <div class="time-slot">
+                            <div class="time-label">13:00</div>
+                            <div class="slot-content">
+                                <h4>抵达与入住 <span class="slot-tag">启程</span></h4>
+                                <p>乘坐高铁抵达上海，前往吴中路全季酒店办理入住，稍作休整。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">14:00</div>
+                            <div class="slot-content">
+                                <h4>探访伟人足迹 <span class="slot-tag">人文</span></h4>
+                                <p>参观茂名北路上海毛泽东旧居与环境幽雅的宋庆龄故居。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">16:00</div>
+                            <div class="slot-content">
+                                <h4>武康路历史街区 <span class="slot-tag">地标</span></h4>
+                                <p>漫步百年法国梧桐掩映的徐汇区，外观著名船型地标建筑武康大楼。</p>
+                                <div class="image-frame">
+                                    <img src="https://tse1-mm.cn.bing.net/th?q=上海武康大楼高清风景&w=1200&h=800&c=7&rs=1" alt="武康大楼" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="fallback-text">📍 武康大楼实景</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">17:30</div>
+                            <div class="slot-content">
+                                <h4>圆苑酒家品味晚宴 <span class="slot-tag">寻味</span></h4>
+                                <p>在武康路附近品尝正宗本帮浓油赤酱风味。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">19:30</div>
+                            <div class="slot-content">
+                                <h4>豫园商城赏灯 <span class="slot-tag">夜景</span></h4>
+                                <p>在古色古香的九曲桥畔散步，欣赏古典江南夜灯。</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
             </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">10:30</span>
-                    <span class="location-title">中共一大会址</span>
-                </div>
-                <div class="desc">前往新天地，瞻仰革命圣地。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">11:30</span>
-                    <span class="location-title">周公馆</span>
-                </div>
-                <div class="desc">参观中国共产党代表团驻沪办事处纪念馆。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">12:30</span>
-                    <span class="location-title">思南公馆</span>
-                </div>
-                <div class="desc">在静谧的老洋房街区享用午餐，结束海派文化之旅。</div>
-            </div>
-
-            <div class="timeline-item">
-                <div>
-                    <span class="time-label">15:00</span>
-                    <span class="location-title">适时返程</span>
-                </div>
-                <div class="desc">前往高铁站，乘坐 17:00 班次列车返回济南。</div>
-            </div>
-
         </div>
+
+        <!-- 🌟 第四屏：Day 2 -->
+        <div class="section" id="section-day2">
+            <div class="section-inner">
+                <article class="day-card">
+                    <div class="day-header">
+                        <div class="day-badge-row">
+                            <div class="day-number">D2</div>
+                            <div class="day-date">6月20日</div>
+                        </div>
+                        <h3 class="day-title">浦江风云与海派绮梦</h3>
+                    </div>
+                    <div class="day-content">
+                        <div class="time-slot">
+                            <div class="time-label">09:00</div>
+                            <div class="slot-content">
+                                <h4>登顶东方明珠 <span class="slot-tag">地标</span></h4>
+                                <p>登上标志性广播电视塔，俯瞰黄浦江两岸天际线。</p>
+                                <div class="image-frame">
+                                    <img src="https://tse1-mm.cn.bing.net/th?q=上海东方明珠塔高清风景&w=1200&h=800&c=7&rs=1" alt="东方明珠塔" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="fallback-text">📍 东方明珠实景</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">10:30</div>
+                            <div class="slot-content">
+                                <h4>轮渡与和平饭店 <span class="slot-tag">经典</span></h4>
+                                <p>体验百年轮渡前往外滩，漫步万国建筑群并步入和平饭店感受奢华。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">12:30</div>
+                            <div class="slot-content">
+                                <h4>德兴菜馆百年风味 <span class="slot-tag">寻味</span></h4>
+                                <p>品味杜月笙当年最爱光顾的百年老字号传统午宴。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">14:00</div>
+                            <div class="slot-content">
+                                <h4>上海城隍庙参观 <span class="slot-tag">祈福</span></h4>
+                                <p>感受传统道教文化祈求平安。随后返回酒店午觉恢复体力。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">18:30</div>
+                            <div class="slot-content">
+                                <h4>《上海千古情》大秀 <span class="slot-tag">高光</span></h4>
+                                <p>前往世博园区，观赏极具视觉震撼力的大型舞台秀！</p>
+                                <div class="image-frame">
+                                    <img src="https://tse1-mm.cn.bing.net/th?q=上海千古情演出舞台高清&w=1200&h=800&c=7&rs=1" alt="舞台秀演出" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="fallback-text">📍 舞台秀演出实况</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <!-- 🌟 第五屏：Day 3 -->
+        <div class="section" id="section-day3">
+            <div class="section-inner">
+                <article class="day-card">
+                    <div class="day-header">
+                        <div class="day-badge-row">
+                            <div class="day-number">D3</div>
+                            <div class="day-date">6月21日</div>
+                        </div>
+                        <h3 class="day-title">祈福漫步与从容返程</h3>
+                    </div>
+                    <div class="day-content">
+                        <div class="time-slot">
+                            <div class="time-label">09:00</div>
+                            <div class="slot-content">
+                                <h4>古刹静安寺 <span class="slot-tag">祈福</span></h4>
+                                <p>退房寄存行李后，前往闹市中金碧辉煌的千年古刹感受宁静祥和。</p>
+                                <div class="image-frame">
+                                    <img src="https://tse1-mm.cn.bing.net/th?q=上海静安寺高清风景&w=1200&h=800&c=7&rs=1" alt="静安寺" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="fallback-text">📍 静安寺实景</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">10:30</div>
+                            <div class="slot-content">
+                                <h4>红色初心之旅 <span class="slot-tag">瞻仰</span></h4>
+                                <p>前往新天地，瞻仰中共一大会址与周公馆，重温峥嵘岁月。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">12:30</div>
+                            <div class="slot-content">
+                                <h4>思南公馆洋房午餐 <span class="slot-tag">寻味</span></h4>
+                                <p>在静谧的老洋房街区享用悠闲午餐，为旅程画上完美句号。</p>
+                            </div>
+                        </div>
+
+                        <div class="time-slot">
+                            <div class="time-label">15:00</div>
+                            <div class="slot-content">
+                                <h4>满载而归 <span class="slot-tag">返程</span></h4>
+                                <p>提取行李，从容前往高铁站，带着满满的回忆返回济南。</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <!-- 🌟 尾屏 (高度自适应) -->
+        <div class="section fp-auto-height" id="section-footer">
+            <div class="footer-content">
+                <p class="footer-quote">黄浦江畔，岁月留香</p>
+                <p class="footer-note">爸爸妈妈，期待与你们携手漫步大上海！❤️</p>
+            </div>
+        </div>
+
     </div>
 
+    <!-- 引入 fullPage.js 官方核心库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
+    <script>
+        // 初始化 fullPage 引擎
+        new fullpage('#fullpage', {
+            licenseKey: 'gplv3-license', // 修复 fullPage.js license 报错
+            autoScrolling: true,
+            scrollHorizontally: true,
+            navigation: true, // 开启右侧丝滑导航点
+            navigationPosition: 'right',
+            // 核心防御机制：开启内部滚动！
+            // 当长辈字号太大导致卡片高度超过屏幕时，可在卡片内部丝滑上下滑动，绝不吞字！
+            scrollOverflow: true, 
+            fitToSection: true,
+            // 手机端响应式优化：依然保持整屏框架，但允许自由内部消化高度
+            credits: { enabled: false } // 隐藏官方水印保持纯净
+        });
+    </script>
 </body>
 </html>
